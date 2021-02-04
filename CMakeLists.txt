@@ -228,16 +228,18 @@ verbose_message("Install targets succesfully build. Install with `cmake --build 
 # Quick `ConfigVersion.cmake` creation
 #
 
-set(COPY_SOURCE "${CMAKE_CURRENT_LIST_DIR}/cmake/ProjectConfig.cmake.in")
-set(COPY_TARGET "${CMAKE_CURRENT_LIST_DIR}/cmake/${PROJECT_NAME}Config.cmake.in")
-execute_process (
-  COMMAND 
-    "copy ${COPY_SOURCE} ${COPY_TARGET}"
-  OUTPUT_VARIABLE 
-    STDOUT
-)
-message(STATUS "------------------ Copy Output ------------------\n${STDOUT}")
-message(STATUS "-------------------------------------------------")
+file(TO_NATIVE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/ProjectConfig.cmake.in" COPY_SOURCE)
+file(TO_NATIVE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/${PROJECT_NAME}Config.cmake.in" COPY_TARGET)
+if (WIN32)
+  execute_process(
+    COMMAND 
+      cmd /c copy /y "${COPY_SOURCE}" "${COPY_TARGET}"
+    OUTPUT_VARIABLE 
+      STDOUT_VAR
+  )
+  message(STATUS "------------------ Copy Output ------------------\n${STDOUT_VAR}")
+  message(STATUS "-------------------------------------------------")
+endif()
 
 include(CMakePackageConfigHelpers)
 write_basic_package_version_file(
