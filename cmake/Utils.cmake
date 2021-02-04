@@ -71,6 +71,34 @@ function(add_boost_to_project BOOST_VER BOOST_INCL_DIR BOOST_LIB_DIR)
 endfunction()
 
 #
+# Create project config file by copying template project config file.
+#
+
+function(create_project_config_file SOURCE TARGET)
+  file(TO_NATIVE_PATH ${SOURCE} COPY_SOURCE)
+  file(TO_NATIVE_PATH ${TARGET} COPY_TARGET)
+  
+  if (WIN32)
+    execute_process(
+      COMMAND 
+        cmd /c copy /y "${COPY_SOURCE}" "${COPY_TARGET}"
+      OUTPUT_VARIABLE 
+        STDOUT_VAR
+    )
+  else()
+    execute_process(
+      COMMAND 
+        bash -c "copy ${COPY_SOURCE} ${COPY_TARGET}"
+      OUTPUT_VARIABLE 
+        STDOUT_VAR
+    )
+  endif()
+  
+  message(STATUS "------------------ Copy Output ------------------\n${STDOUT_VAR}")
+  message(STATUS "-------------------------------------------------")
+endfunction()
+
+#
 # Print out all variables
 #
 
