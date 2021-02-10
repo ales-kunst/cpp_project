@@ -289,7 +289,8 @@ Function Build-Zlib {
 }
 
 Init-Build
-Push-Location '.\deps\repos'
+# Push-Location '.\deps\repos'
+Push-Location $global:reposFolder
 # Build-Zlib
 # Build-Bzip2
 # Build-CryptoCpp
