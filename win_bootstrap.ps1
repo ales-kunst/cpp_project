@@ -132,13 +132,13 @@ Function Build-Curl {
     If ( -not (Test-Path '.\curl' -PathType Any) ) {  
         git.exe clone --depth 1 -j4 https://github.com/curl/curl.git
     }
-    Rename-Item -Path "$global:libFolder\cares.lib" -NewName "$global:libFolder\libcares.lib" -ErrorAction 'SilentlyContinue'
-    Rename-Item -Path "$global:libFolder\caresd.lib" -NewName "$global:libFolder\libcaresd.lib" -ErrorAction 'SilentlyContinue'
-    Rename-Item -Path "$global:libFolder\nghttp2.lib" -NewName "$global:libFolder\nghttp2_static.lib" -ErrorAction 'SilentlyContinue'
-    Rename-Item -Path "$global:libFolder\nghttp2d.lib" -NewName "$global:libFolder\nghttp2_staticd.lib" -ErrorAction 'SilentlyContinue'
-    Rename-Item -Path "$global:libFolder\zlibstatic.lib" -NewName "$global:libFolder\zlib_a.lib" -ErrorAction 'SilentlyContinue'
-    Rename-Item -Path "$global:libFolder\zlibstatic.lib" -NewName "$global:libFolder\zlib_ad.lib" -ErrorAction 'SilentlyContinue'
-    Rename-Item -Path "$global:reposFolder\curl\src\tool_hugehelp.c.cvs" -NewName "$global:reposFolder\curl\src\tool_hugehelp.c" -ErrorAction 'SilentlyContinue'
+    Rename-Item -Path "$global:libFolder\cares.lib" -NewName "libcares.lib" -ErrorAction 'SilentlyContinue'
+    Rename-Item -Path "$global:libFolder\caresd.lib" -NewName "libcaresd.lib" -ErrorAction 'SilentlyContinue'
+    Rename-Item -Path "$global:libFolder\nghttp2.lib" -NewName "nghttp2_static.lib" -ErrorAction 'SilentlyContinue'
+    Rename-Item -Path "$global:libFolder\nghttp2d.lib" -NewName "nghttp2_staticd.lib" -ErrorAction 'SilentlyContinue'
+    Rename-Item -Path "$global:libFolder\zlibstatic.lib" -NewName "zlib_a.lib" -ErrorAction 'SilentlyContinue'
+    Rename-Item -Path "$global:libFolder\zlibstatic.lib" -NewName "zlib_ad.lib" -ErrorAction 'SilentlyContinue'
+    Rename-Item -Path "$global:reposFolder\curl\src\tool_hugehelp.c.cvs" -NewName "tool_hugehelp.c" -ErrorAction 'SilentlyContinue'
 
     Push-Location ".\curl\winbuild"
     nmake /f Makefile.vc mode=static VC=15 WITH_DEVEL=$global:dependencyFolder WITH_SSL=static WITH_NGHTTP2=static WITH_CARES=static WITH_ZLIB=static WITH_SSH2=static
@@ -151,13 +151,13 @@ Function Build-Curl {
     Push-Location "..\builds\libcurl*debug*static"
     Copy-Item -Path ".\lib\*.lib" -Destination $global:libFolder
     
-    Rename-Item -Path "$global:libFolder\libcares.lib" -NewName "$global:libFolder\cares.lib" -ErrorAction 'SilentlyContinue'
-    Rename-Item -Path "$global:libFolder\libcaresd.lib" -NewName "$global:libFolder\caresd.lib" -ErrorAction 'SilentlyContinue'
-    Rename-Item -Path "$global:libFolder\nghttp2_static.lib" -NewName "$global:libFolder\nghttp2.lib" -ErrorAction 'SilentlyContinue'
-    Rename-Item -Path "$global:libFolder\nghttp2_staticd.lib" -NewName "$global:libFolder\nghttp2d.lib" -ErrorAction 'SilentlyContinue'
-    Rename-Item -Path "$global:libFolder\zlib_a.lib" -NewName "$global:libFolder\zlibstatic.lib" -ErrorAction 'SilentlyContinue'
-    Rename-Item -Path "$global:libFolder\zlib_ad.lib" -NewName "$global:libFolder\zlibstaticd.lib" -ErrorAction 'SilentlyContinue'
-    Rename-Item -Path "$global:reposFolder\curl\src\tool_hugehelp.c" -NewName "$global:reposFolder\curl\src\tool_hugehelp.c.cvs" -ErrorAction 'SilentlyContinue'
+    Rename-Item -Path "$global:libFolder\libcares.lib" -NewName "cares.lib" -ErrorAction 'SilentlyContinue'
+    Rename-Item -Path "$global:libFolder\libcaresd.lib" -NewName "caresd.lib" -ErrorAction 'SilentlyContinue'
+    Rename-Item -Path "$global:libFolder\nghttp2_static.lib" -NewName "nghttp2.lib" -ErrorAction 'SilentlyContinue'
+    Rename-Item -Path "$global:libFolder\nghttp2_staticd.lib" -NewName "nghttp2d.lib" -ErrorAction 'SilentlyContinue'
+    Rename-Item -Path "$global:libFolder\zlib_a.lib" -NewName "zlibstatic.lib" -ErrorAction 'SilentlyContinue'
+    Rename-Item -Path "$global:libFolder\zlib_ad.lib" -NewName "zlibstaticd.lib" -ErrorAction 'SilentlyContinue'
+    Rename-Item -Path "$global:reposFolder\curl\src\tool_hugehelp.c" -NewName "tool_hugehelp.c.cvs" -ErrorAction 'SilentlyContinue'
     Pop-Location
     Pop-Location
 }
@@ -244,13 +244,13 @@ Function Build-OpenSSL-Debug {
     Push-Location ".\openssl"
     perl Configure VC-WIN64A no-shared zlib no-zlib-dynamic threads -d --openssldir=$global:dependencyFolder --prefix=$global:dependencyFolder
     $content = Get-Content -Path 'makefile'
-    $content = $content -Replace 'ZLIB1', '..\..\lib\zlibstatic.lib'
+    $content = $content -Replace 'ZLIB1', '..\..\lib\zlibstaticd.lib'
     $content | Set-Content -Path  'makefile'
     Copy-Item -Path "$global:includeFolder\zlib.h" -Destination "."
     Copy-Item -Path "$global:includeFolder\zconf.h" -Destination "."
     nmake install
-    Rename-Item -Path "$global:libFolder\libcrypto.lib" -NewName "$global:libFolder\libcryptod.lib"
-    Rename-Item -Path "$global:libFolder\libssl.lib" -NewName "$global:libFolder\libssld.lib"
+    Rename-Item -Path "$global:libFolder\libcrypto.lib" -NewName "libcryptod.lib"
+    Rename-Item -Path "$global:libFolder\libssl.lib" -NewName "libssld.lib"
     Pop-Location
 }
 
@@ -263,8 +263,8 @@ Function Build-Bzip2 {
     nmake.exe lib bzip2 -f makefile_debug.msc
     Copy-Item -Path "bzlib.h" -Destination $global:includeFolder
     Copy-Item -Path "*.lib" -Destination $global:libFolder
-    Rename-Item -Path "$global:libFolder\libbz2_a.lib" -NewName "$global:libFolder\libbz2.lib"
-    Rename-Item -Path "$global:libFolder\libbz2_a_debug.lib" -NewName "$global:libFolder\libbz2d.lib"
+    Rename-Item -Path "$global:libFolder\libbz2_a.lib" -NewName "libbz2.lib"
+    Rename-Item -Path "$global:libFolder\libbz2_a_debug.lib" -NewName "libbz2d.lib"
     Pop-Location
 }
 
@@ -289,7 +289,6 @@ Function Build-Zlib {
 }
 
 Init-Build
-# Push-Location '.\deps\repos'
 Push-Location $global:reposFolder
 # Build-Zlib
 # Build-Bzip2

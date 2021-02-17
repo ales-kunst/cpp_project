@@ -40,12 +40,12 @@ endfunction()
 # Add library to the project
 #
 
-function(add_library_to_project LIBRARY_NAME INCLUDE_DIR LIB_DIR)
+function(add_library_to_project LIBRARY_NAME LIB_DIR)
   message(STATUS "++++ Searching for library: ${LIBRARY_NAME} in folder: ${LIB_DIR} ++++")
-  find_library(LIB_R NAMES ${LIBRARY_NAME} PATHS ${DEPS_LIBRARY_DIR} REQUIRED)
-  find_library(LIB_D NAMES ${LIBRARY_NAME}d PATHS ${DEPS_LIBRARY_DIR} REQUIRED)
-  message(STATUS "++++ Adding library: ${LIBRARY_NAME} to project: ${PROJECT} ++++")
-  target_link_libraries(${PROJECT_NAME} PRIVATE debug ${LIB_D} optimized ${LIB_R})
+  find_library(${LIBRARY_NAME}_R NAMES ${LIBRARY_NAME} PATHS ${DEPS_LIBRARY_DIR} REQUIRED)
+  find_library(${LIBRARY_NAME}_D NAMES ${LIBRARY_NAME}d PATHS ${DEPS_LIBRARY_DIR} REQUIRED)
+  message(STATUS "++++ Adding library: ${LIBRARY_NAME} [${${LIBRARY_NAME}_R}, ${${LIBRARY_NAME}_D}] to project: ${PROJECT_NAME} ++++")
+  target_link_libraries(${PROJECT_NAME} PRIVATE debug ${${LIBRARY_NAME}_D} optimized ${${LIBRARY_NAME}_R})
   # this is how you retrn value: set(${REQUIRED_ARG} "From SIMPLE" PARENT_SCOPE)
 endfunction()
 
