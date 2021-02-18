@@ -91,7 +91,7 @@ Function Build-LibUv {
     Pop-Location
 }
 
-Function Build-CryptoPp {
+Function Build-Cryptopp {
     If ( -not (Test-Path '.\cryptopp' -PathType Any) ) {
         git.exe clone --depth 1 -j4 https://github.com/weidai11/cryptopp.git
     }
@@ -292,7 +292,7 @@ Init-Build
 Push-Location $global:reposFolder
 # Build-Zlib
 # Build-Bzip2
-# Build-CryptoCpp
+# Build-Cryptopp
 # Build-OpenSSL-Debug
 # Build-OpenSSL-Release
 # Build-Nghttp2
