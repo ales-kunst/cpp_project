@@ -71,6 +71,39 @@ function(add_boost_to_project BOOST_VER BOOST_INCL_DIR BOOST_LIB_DIR)
 endfunction()
 
 #
+# Add Boost library to the project
+#
+
+macro(add_qt_to_project)
+  find_package(Qt5 COMPONENTS ${ARGN} REQUIRED)
+
+  foreach(ARG IN ITEMS ${ARGN})
+    target_link_libraries(
+      ${PROJECT_NAME}
+      PRIVATE
+        Qt5::${ARG}
+    )
+  endforeach()
+
+  if (MSVC)
+    add_custom_command(
+      TARGET 
+        ${PROJECT_NAME}
+      POST_BUILD
+      COMMAND 
+        if [$(Configuration)]==[Debug] ${Qt5_DIR}/../../../bin/windeployqt.exe --debug $(OutDir)$(TargetName)$(TargetExt)
+      COMMAND
+        if [$(Configuration)]==[Release] ${Qt5_DIR}/../../../bin/windeployqt.exe --release $(OutDir)$(TargetName)$(TargetExt)
+      COMMAND
+        if [$(Configuration)]==[MinSizeRel] ${Qt5_DIR}/../../../bin/windeployqt.exe --release $(OutDir)$(TargetName)$(TargetExt)
+      COMMAND
+        if [$(Configuration)]==[RelWithDebInfo] ${Qt5_DIR}/../../../bin/windeployqt.exe --release $(OutDir)$(TargetName)$(TargetExt)
+      COMMENT "Running WindeployQt"
+    )
+  endif()
+endmacro()
+
+#
 # Create project config file by copying template project config file.
 #
 

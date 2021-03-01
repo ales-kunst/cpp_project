@@ -7,6 +7,17 @@ option(${PROJECT_NAME}_BUILD_HEADERS_ONLY "Build the project as a header-only li
 option(${PROJECT_NAME}_USE_ALT_NAMES "Use alternative names for the project, such as naming the include directory all lowercase." ON)
 
 #
+# Qt settings
+#
+
+option(${PROJECT_NAME}_USE_QT "Enable Qt dependencies for this project." OFF)
+if(${PROJECT_NAME}_USE_QT)
+    set(CMAKE_AUTOMOC ON)
+    set(CMAKE_AUTORCC ON)
+    set(CMAKE_AUTOUIC ON)
+endif()
+
+#
 # Compiler options
 #
 
