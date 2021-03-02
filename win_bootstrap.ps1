@@ -1,6 +1,6 @@
 
 $global:cmakeToolChain = "Visual Studio 16 2019"
-$global:dependencyFolder = "$PSScriptRoot\deps"
+$global:dependencyFolder = "$PSScriptRoot\..\..\3rdparty"
 $global:reposFolder = "$global:dependencyFolder\repos"
 $global:binFolder = "$global:dependencyFolder\bin"
 $global:includeFolder = "$global:dependencyFolder\include"
@@ -20,6 +20,24 @@ Function Init-Build {
     If ( -not (Test-Path $global:libFolder -PathType Any) ) {
         mkdir $global:libFolder # -ErrorAction 'SilentlyContinue'
     }
+}
+
+Function Build-RapidYaml {
+    If ( -not (Test-Path '.\rapidyaml' -PathType Any) ) {
+        git clone --recursive https://github.com/biojppm/rapidyaml
+    }
+    Push-Location ".\rapidyaml"
+    Remove-Item -r ".\build" -fo -ErrorAction 'SilentlyContinue'
+    mkdir ".\build" -ErrorAction 'SilentlyContinue'
+    Push-Location ".\build"
+    cmake -G"$global:cmakeToolChain" ..
+    cmake --build ./ --config Release --target ryml
+    cmake --build ./ --config Debug --target ryml
+    Copy-Item -Path ".\Debug\ryml.lib" -Destination "$global:libFolder\rymld.lib" -ErrorAction 'SilentlyContinue'
+    Copy-Item -Path ".\Release\ryml.lib" -Destination "$global:libFolder\ryml.lib" -ErrorAction 'SilentlyContinue'
+    Robocopy.exe "..\src" "$global:includeFolder" *.hpp *.cpp /E /Z
+    Pop-Location
+    Pop-Location
 }
 
 Function Build-Boost {
@@ -47,7 +65,6 @@ Function Build-Boost {
     Pop-Location
 }
 
-
 Function Build-uWebSockets {
     If ( -not (Test-Path '.\uWebSockets' -PathType Any) ) {
         git.exe clone --depth 1 -j4 https://github.com/uNetworking/uWebSockets.git
@@ -62,7 +79,7 @@ Function Build-uSockets {
         git.exe clone --depth 1 -j4 https://github.com/uNetworking/uSockets.git
     }
     Push-Location ".\uSockets"
-    Copy-Item -Path "..\..\..\win\uSockets.vcxproj" -Destination ".\" -ErrorAction 'SilentlyContinue'
+    Copy-Item -Path "$PSScriptRoot\win\uSockets.vcxproj" -Destination ".\"
     msbuild.exe  uSockets.vcxproj /t:Rebuild /p:Configuration=Debug /p:Platform=x64
     msbuild.exe  uSockets.vcxproj /t:Rebuild /p:Configuration=Release /p:Platform=x64
     Copy-Item -Path ".\x64\Debug\libuSocketsd.lib" -Destination "$global:libFolder" -ErrorAction 'SilentlyContinue'
@@ -303,5 +320,6 @@ Push-Location $global:reposFolder
 # Build-LibUv
 # Build-uSockets
 # Build-uWebSockets
-Build-Boost
+# Build-Boost
+# Build-RapidYaml
 Pop-Location

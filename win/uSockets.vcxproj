@@ -11,12 +11,12 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{39D08679-782E-41AC-BDE0-06A462568EFF}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.default.props" />
   <PropertyGroup>
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <ProjectName>uSockets</ProjectName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -32,7 +32,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\drive_d\programming\projects\cpp\scrapbook\commercior\deps\include;src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\include;src</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>LIBUS_USE_OPENSSL;LIBUS_USE_LIBUV</PreprocessorDefinitions>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeLibrary Condition="'$(Configuration)|$(Platform)'=='Release|x64'">MultiThreadedDLL</RuntimeLibrary>
